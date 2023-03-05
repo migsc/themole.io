@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
-    "postinstall": "prisma generate",
+    "dev": "run-p dev:*",
+    "dev:server": "next dev",
+    "postinstall": "run-p setup:*",
+    "setup:migrate": "prisma migrate dev",
+    "setup:seed": "prisma db seed",
+    "setup:generate": "prisma generate",
     "lint": "next lint",
     "start": "next start"
   },
@@ -35,6 +39,7 @@
     "autoprefixer": "^10.4.7",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.1",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",

@@ -6,12 +6,31 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "cockroachdb"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
+}
+
+model Puzzle {
+    id Int @id @default(sequence())
+    scheduledFor DateTime
+    image String
+    hitboxes Hitbox[]
+    solveCount Int @default(0)
+    attempCount Int @default(0)
+}
+
+model Hitbox {
+    id Int @id @default(sequence())
+    puzzleId Int
+    topLeftX Int
+    topLeftY Int
+    bottomRightX Int
+    bottomRightY Int
+    puzzel Puzzle @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
 }
 
 model Example {
@@ -64,3 +83,10 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+
+// hint feature
+
+// local storage
+// score // decay
+// hint part of the image that grays to 
