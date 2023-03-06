@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "run-p dev:*",
     "dev:server": "next dev",
-    "postinstall": "run-p setup:*",
+    "postinstall": "prisma db generate && prisma db seed",
     "setup:migrate": "prisma migrate dev",
     "setup:seed": "prisma db seed",
     "setup:generate": "prisma generate",
