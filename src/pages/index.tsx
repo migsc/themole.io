@@ -5,6 +5,7 @@ import { usePlayerState } from "~/context/player";
 import dayjs from "dayjs";
 import { PrismaClient } from "@prisma/client";
 import aws from "aws-sdk";
+import { Picture } from "@prisma/client";
 
 aws.config.update({
   signatureVersion: "v4",
@@ -46,7 +47,13 @@ export async function getServerSideProps(context) {
   };
 }
 
-const Home: NextPage = ({ picture, pictureUrl }) => {
+const Home: NextPage = ({
+  picture,
+  pictureUrl,
+}: {
+  picture: Picture & { scheduledAt: string };
+  pictureUrl: string;
+}) => {
   const [player] = usePlayerState();
   console.log({ pictureUrl });
   return (
