@@ -14,23 +14,24 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Puzzle {
-    id Int @id @default(sequence())
-    scheduledFor DateTime
-    image String
-    hitboxes Hitbox[]
-    solveCount Int @default(0)
-    attempCount Int @default(0)
+model Picture {
+    id           Int      @id @default(sequence())
+    scheduledFor DateTime @unique
+    filename     String   @map("image")
+    description  String
+    hitboxes     Hitbox[]
+    solveCount   Int      @default(0)
+    attempCount  Int      @default(0)
+
+    @@map("Puzzle")
 }
 
 model Hitbox {
-    id Int @id @default(sequence())
-    puzzleId Int
-    topLeftX Int
-    topLeftY Int
-    bottomRightX Int
-    bottomRightY Int
-    puzzel Puzzle @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+    id          Int     @id @default(sequence())
+    puzzleId    Int
+    topLeft     Int[]
+    bottomRight Int[]
+    puzzel      Picture @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
 }
 
 model Example {
@@ -83,7 +84,6 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
-
 
 // hint feature
 

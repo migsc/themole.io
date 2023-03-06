@@ -20,5 +20,15 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images:{
+    remotePatterns:[
+      {
+        protocol: "https",
+        hostname: "mole-pics-dev.s3.us-east-2.amazonaws.com",
+        port: '',
+        pathname: "/**",
+      }
+    ]
+  }
 };
 export default config;
