@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import dayjs from "dayjs";
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+const { PrismaClient } = require("@prisma/client");
+const dayjs = require("dayjs");
 
 const prisma = new PrismaClient();
 
