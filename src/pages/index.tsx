@@ -49,7 +49,7 @@ const Home: NextPage = ({
   picture,
   pictureUrl,
 }: {
-  picture: Picture;
+  picture: Picture & { hitboxes: Hitbox[] };
   pictureUrl: string;
 }) => {
   const [player] = usePlayerState();
@@ -60,7 +60,7 @@ const Home: NextPage = ({
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [timestampStarted, setTimestampStarted] = useState<Date>(null);
 
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [{ width: currentWidth, height: currentHeight }, setCurrentSize] =
     useState({
       width: picture.width,
@@ -97,16 +97,11 @@ const Home: NextPage = ({
     setTimestampStarted(new Date());
   }
 
-  function handleImageClicked(e) {
+  function handleImageClicked(e: React.MouseEvent<HTMLImageElement>) {
     e.preventDefault();
 
     const mouseX = e.nativeEvent.offsetX;
     const mouseY = e.nativeEvent.offsetY;
-
-    console.log({ mouseX, mouseY });
-
-    // const relativeMouseX = mouseX * widthScaleFactor;
-    // const relativeMouseY = mouseY * heightScaleFactor;
 
     for (const hitbox of relativeHitboxes) {
       if (isMouseInHitbox([mouseX, mouseY], hitbox)) {
@@ -295,28 +290,27 @@ function getRelativeHitbox(
   hitbox: Hitbox,
   widthScaleFactor: number,
   heightScaleFactor: number
-) {
+): Hitbox {
   const [topLeftX, topLeftY] = hitbox.topLeft;
   const [bottomRightX, bottomRightY] = hitbox.bottomRight;
 
   return {
-    topLeftX: topLeftX * widthScaleFactor,
-    topLeftY: topLeftY * heightScaleFactor,
-    bottomRightX: bottomRightX * widthScaleFactor,
-    bottomRightY: bottomRightY * widthScaleFactor,
+    ...hitbox,
+    topLeft: [topLeftX * widthScaleFactor, topLeftY * heightScaleFactor],
+    bottomRight: [
+      bottomRightX * widthScaleFactor,
+      bottomRightY * widthScaleFactor,
+    ],
   };
 }
 
 function isMouseInHitbox(
-  [mouseX, mouseY],
-  { topLeftX, topLeftY, bottomRightX, bottomRightY }
+  [mouseX, mouseY]: [number, number],
+  {
+    topLeft: [topLeftX, topLeftY],
+    bottomRight: [bottomRightX, bottomRightY],
+  }: Hitbox
 ) {
-  console.log(`
-      ${mouseX} >= ${topLeftX} &&
-      ${mouseY} >= ${topLeftY} &&
-      ${mouseX} <= ${bottomRightX} &&
-      ${mouseY} <= ${bottomRightY}
-      `);
   if (
     mouseX >= topLeftX &&
     mouseY >= topLeftY &&
@@ -353,10 +347,10 @@ function calculateScoreFromSeconds(seconds) {
   return score;
 }
 
-function getSecondsFormatted(seconds) {
-  const minutes = parseInt(seconds / 60);
+function getSecondsFormatted(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
   const minutesFormatted = minutes ? `${minutes} min ` : "";
-  const secondsFormatted = `${parseInt(seconds % 60)} sec`;
+  const secondsFormatted = `${seconds % 6} sec`;
 
   return minutesFormatted + secondsFormatted;
 }
