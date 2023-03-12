@@ -1,0 +1,122 @@
+[
+  {
+    "filename": "dudas-1.jpg",
+    "description": "Find the heart among the elephants.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [239, 42],
+        "bottomRight": [360, 81]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-2.jpg",
+    "description": "Find the easter egg in the field of tulips.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [539, 465],
+        "bottomRight": [574, 504]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-3.jpg",
+    "description": "Find the green fish.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [580, 211],
+        "bottomRight": [630, 248]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-4.jpg",
+    "description": "Find the polar bear.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [58, 293],
+        "bottomRight": [110, 341]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-5.jpg",
+    "description": "Find the four-leaf clover",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [586, 18],
+        "bottomRight": [614, 46]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-6.jpg",
+    "description": "Find the cat amongst owls.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [97, 478],
+        "bottomRight": [197, 560]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-7.jpg",
+    "description": "Find the marshmallow.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [215, 426],
+        "bottomRight": [235, 448]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-8.jpg",
+    "description": "Find the heart amongst snails.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [90, 171],
+        "bottomRight": [120, 196]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-9.jpg",
+    "description": "Find the soccer ball.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [585, 293],
+        "bottomRight": [651, 346]
+      }
+    ]
+  },
+  {
+    "filename": "dudas-10.jpg",
+    "description": "Find the bear amongst reindeers.",
+    "width": 728,
+    "height": 728,
+    "hitboxes": [
+      {
+        "topLeft": [272, 434],
+        "bottomRight": [316, 472]
+      }
+    ]
+  }
+]

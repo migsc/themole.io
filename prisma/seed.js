@@ -1,51 +1,45 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-const { PrismaClient } = require("@prisma/client");
 const dayjs = require("dayjs");
+const { PrismaClient } = require("@prisma/client");
+const aws = require("aws-sdk");
+const fs = require("fs");
 
 const prisma = new PrismaClient();
 
-const samplePictures = [
-  {
-    filename: "sample-dudas-1.jpg",
-    description: "Find the heart among the elephants.",
-    hitboxes: [
-      {
-        topLeft: [239, 42],
-        bottomRight: [360, 81],
-      },
-    ],
-  },
-  {
-    filename: "sample-dudas-2.jpg",
-    description: "Find the easter egg in the field of tulips.",
-    hitboxes: [
-      {
-        topLeft: [539, 465],
-        bottomRight: [574, 504],
-      },
-    ],
-  },
-];
+aws.config.update({
+  signatureVersion: "v4",
+});
+
+aws.config.update({ region: process.env.AWS_S3_BUCKET_REGION });
+
+const s3 = new aws.S3({
+  region: process.env.AWS_S3_BUCKET_REGION,
+});
+
+const samplePictures = require("./sample-data/pictures.json");
 
 async function seed() {
+  await prisma.picture.deleteMany({});
+
   const $today = dayjs().subtract(1, "day").startOf("day");
 
   for (const [index, samplePic] of samplePictures.entries()) {
-    // await prisma.picture.deleteMany({
-    //   where: {
-    //     filename: samplePic.filename,
-    //   },
-    // });
+    const $day = $today.add(index, "day");
+    const dateFormatted = $day.format("YYYY-MM-DD");
+    const persistedFilename = `${dateFormatted}-${samplePic.filename}`;
 
-    await prisma.picture.deleteMany({});
-
-    const day = $today.add(index, "day").startOf("day").toDate();
+    await saveFileInS3(
+      persistedFilename,
+      fs.readFileSync(`./prisma/sample-data/${samplePic.filename}`)
+    );
 
     const picture = await prisma.picture.create({
       data: {
-        scheduledFor: day,
-        filename: samplePic.filename,
+        scheduledFor: dateFormatted,
+        filename: persistedFilename,
         description: samplePic.description,
+        width: samplePic.width,
+        height: samplePic.height,
         hitboxes: {
           create: samplePic.hitboxes,
         },
@@ -66,3 +60,22 @@ seed()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+async function saveFileInS3(key, blob) {
+  return new Promise((resolve, reject) => {
+    s3.putObject(
+      {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: key,
+        Body: blob,
+      },
+      (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      }
+    );
+  });
+}

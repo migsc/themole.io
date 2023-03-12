@@ -16,28 +16,22 @@ datasource db {
 
 model Picture {
     id           Int      @id @default(sequence())
-    scheduledFor DateTime @unique
+    scheduledFor String   @unique
     filename     String   @map("image")
     description  String
+    width        Int
+    height       Int
     hitboxes     Hitbox[]
     solveCount   Int      @default(0)
-    attempCount  Int      @default(0)
-
-    @@map("Puzzle")
+    attemptCount Int      @default(0)
 }
 
 model Hitbox {
     id          Int     @id @default(sequence())
-    puzzleId    Int
     topLeft     Int[]
     bottomRight Int[]
-    puzzel      Picture @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
-}
-
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    pictureId   Int
+    picture     Picture @relation(fields: [pictureId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth
@@ -84,9 +78,3 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
-
-// hint feature
-
-// local storage
-// score // decay
-// hint part of the image that grays to 
