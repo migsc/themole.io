@@ -34,6 +34,12 @@ export async function getStaticProps(context) {
 
   const pictureUrl = await s3.getSignedUrlPromise("getObject", params);
 
+  if (!picture || !pictureUrl) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       pictureUrl,
