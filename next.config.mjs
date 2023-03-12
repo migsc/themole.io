@@ -16,19 +16,19 @@ const config = {
    *
    * @see https://github.com/vercel/next.js/issues/41980
    */
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
-  images:{
-    remotePatterns:[
+  // i18n: {
+  //   locales: ["en"],
+  //   defaultLocale: "en",
+  // },
+  images: {
+    remotePatterns: [
       {
         protocol: "https",
         hostname: "mole-pics-dev.s3.us-east-2.amazonaws.com",
-        port: '',
+        port: "",
         pathname: "/**",
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 export default config;
