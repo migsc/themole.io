@@ -24,17 +24,26 @@ export async function getStaticProps(context) {
 
   console.log("Found picture:", JSON.stringify(picture, null, 4));
 
-  const params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: picture?.filename,
-    Expires: 60, // The expiration time of the signed URL in seconds
-  };
+  if (!picture?.filename) {
+    return {
+      notFound: true,
+    };
+  }
 
-  const pictureUrl = await s3.getSignedUrlPromise("getObject", params);
+  console.log(process.env.AWS_ACCESS_KEY_ID);
+  console.log(process.env.AWS_SECRET_ACCESS_KEY);
+  console.log(process.env.AWS_S3_BUCKET_NAME);
+  console.log(process.env.AWS_REGION);
+
+  const pictureUrl = await s3.getSignedUrlPromise("getObject", {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: picture.filename,
+    Expires: 60, // The expiration time of the signed URL in seconds
+  });
 
   console.log("Found pictureUrl:", pictureUrl);
 
-  if (!picture || !pictureUrl) {
+  if (!pictureUrl) {
     return {
       notFound: true,
     };
