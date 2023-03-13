@@ -85,7 +85,6 @@ const Home: NextPage = ({
   const [isStartVisible, setIsStartVisible] = useState<boolean>(false);
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [timestampStarted, setTimestampStarted] = useState<Date>(null);
-  const [, render] = useState();
 
   const imageRef = useRef<HTMLImageElement>(null);
   const [{ width: currentWidth, height: currentHeight }, setCurrentSize] =
@@ -362,7 +361,7 @@ function calculateScoreFromSeconds(seconds) {
 function getSecondsFormatted(seconds: number) {
   const minutes = Math.floor(seconds / 60);
   const minutesFormatted = minutes ? `${minutes} min ` : "";
-  const secondsFormatted = `${seconds % 6} sec`;
+  const secondsFormatted = `${seconds % 60} sec`;
 
   return minutesFormatted + secondsFormatted;
 }
