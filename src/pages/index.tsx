@@ -8,7 +8,7 @@ import { Hitbox, Picture } from "@prisma/client";
 import s3 from "~/server/s3";
 import { motion } from "framer-motion";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { prisma } from "../server/db";
 
 export async function getStaticProps(context) {
@@ -31,10 +31,10 @@ export async function getStaticProps(context) {
     };
   }
 
-  console.log(process.env.AWS_ACCESS_KEY_ID);
-  console.log(process.env.AWS_SECRET_ACCESS_KEY);
-  console.log(process.env.AWS_S3_BUCKET_NAME);
-  console.log(process.env.AWS_S3_BUCKET_REGION);
+  // console.log(process.env.AWS_ACCESS_KEY_ID);
+  // console.log(process.env.AWS_SECRET_ACCESS_KEY);
+  // console.log(process.env.AWS_S3_BUCKET_NAME);
+  // console.log(process.env.AWS_S3_BUCKET_REGION);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   // const getObjectCommand = new GetObjectCommand({
@@ -85,6 +85,7 @@ const Home: NextPage = ({
   const [isStartVisible, setIsStartVisible] = useState<boolean>(false);
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [timestampStarted, setTimestampStarted] = useState<Date>(null);
+  const [, render] = useState();
 
   const imageRef = useRef<HTMLImageElement>(null);
   const [{ width: currentWidth, height: currentHeight }, setCurrentSize] =
@@ -101,17 +102,6 @@ const Home: NextPage = ({
   const relativeHitboxes = picture.hitboxes.map((hitbox) =>
     getRelativeHitbox(hitbox, widthScaleFactor, heightScaleFactor)
   );
-
-  console.log({
-    currentWidth,
-    currentHeight,
-    originalWidth,
-    originalHeight,
-    picture,
-    relativeHitboxes,
-    widthScaleFactor,
-    heightScaleFactor,
-  });
 
   console.log({ pictureUrl });
 
@@ -154,11 +144,6 @@ const Home: NextPage = ({
   }
 
   function handleResize() {
-    console.log("resize", {
-      width: imageRef.current.width,
-      height: imageRef.current.height,
-    });
-
     setCurrentSize({
       width: imageRef.current.width,
       height: imageRef.current.height,
@@ -180,19 +165,12 @@ const Home: NextPage = ({
       setIsStartVisible(true);
     }, 2000);
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", () => handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    if (imageRef.current) {
-      handleResize();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageRef.current]);
 
   return (
     <>
@@ -253,6 +231,7 @@ const Home: NextPage = ({
                     width={picture.width}
                     height={picture.height}
                     onClick={handleImageClicked}
+                    onLoad={handleResize}
                   />
                 </a>
               </div>
