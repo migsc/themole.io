@@ -1,4 +1,5 @@
 import { type NextPage } from "next";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import Head from "next/head";
 import Image from "next/image";
 import { usePlayerState } from "~/context/player";
@@ -35,11 +36,17 @@ export async function getStaticProps(context) {
   console.log(process.env.AWS_S3_BUCKET_NAME);
   console.log(process.env.AWS_S3_BUCKET_REGION);
 
-  const pictureUrl = await s3.getSignedUrlPromise("getObject", {
-    Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: picture.filename,
-    Expires: 60, // The expiration time of the signed URL in seconds
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // const getObjectCommand = new GetObjectCommand({
+  //   Bucket: process.env.AWS_S3_BUCKET_NAME,
+  //   Key: picture.filename,
+  // });
+
+  // const object = await s3.send(getObjectCommand);
+
+  // console.log(object);
+
+  const pictureUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/${picture.filename}?x-id=GetObject`;
 
   console.log("Found pictureUrl:", pictureUrl);
 
@@ -181,7 +188,9 @@ const Home: NextPage = ({
   }, []);
 
   useEffect(() => {
-    handleResize();
+    if (imageRef.current) {
+      handleResize();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageRef.current]);
 

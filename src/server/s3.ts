@@ -1,19 +1,7 @@
-import aws from "aws-sdk";
+import { S3Client } from "@aws-sdk/client-s3";
 
-aws.config.update({
-  signatureVersion: "v4",
-});
-
-aws.config.update({ region: process.env.AWS_S3_BUCKET_REGION });
-
-const s3 = new aws.S3({
+const client = new S3Client({
   region: process.env.AWS_S3_BUCKET_REGION,
 });
 
-export default s3;
-
-//   s3.putObject({
-//     Bucket: process.env.AWS_S3_BUCKET_NAME,
-//     Key: "test",
-//     Body: "test",
-//   });
+export default client;
