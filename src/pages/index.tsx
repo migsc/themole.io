@@ -30,13 +30,13 @@ export async function getStaticProps(context) {
     };
   }
 
-  console.log(process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID);
-  console.log(process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY);
-  console.log(process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME);
-  console.log(process.env.NEXT_PUBLIC_AWS_REGION);
+  console.log(process.env.AWS_ACCESS_KEY_ID);
+  console.log(process.env.AWS_SECRET_ACCESS_KEY);
+  console.log(process.env.AWS_S3_BUCKET_NAME);
+  console.log(process.env.AWS_REGION);
 
   const pictureUrl = await s3.getSignedUrlPromise("getObject", {
-    Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: picture.filename,
     Expires: 60, // The expiration time of the signed URL in seconds
   });
