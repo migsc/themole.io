@@ -3,14 +3,12 @@ import Head from "next/head";
 import Image from "next/image";
 import { usePlayerState } from "~/context/player";
 import dayjs from "dayjs";
-import { Hitbox, PrismaClient } from "@prisma/client";
-import { Picture } from "@prisma/client";
+import { Hitbox, Picture } from "@prisma/client";
 import s3 from "~/server/s3";
 import { motion } from "framer-motion";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useRef, useState } from "react";
-
-const prisma = new PrismaClient();
+import { prisma } from "../server/db";
 
 export async function getStaticProps(context) {
   const todaysDate: string = dayjs().format("YYYY-MM-DD");
@@ -166,6 +164,11 @@ const Home: NextPage = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    handleResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageRef.current]);
 
   return (
     <>

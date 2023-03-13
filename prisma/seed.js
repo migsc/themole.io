@@ -20,6 +20,7 @@ const samplePictures = require("./sample-data/pictures.json");
 
 async function seed() {
   await prisma.picture.deleteMany({});
+  await prisma.hitbox.deleteMany({});
 
   const $today = dayjs().subtract(1, "day").startOf("day");
 
