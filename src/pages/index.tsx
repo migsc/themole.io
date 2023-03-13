@@ -22,7 +22,7 @@ export async function getStaticProps(context) {
     },
   });
 
-  console.log({ picture });
+  console.log("Found picture:", JSON.stringify(picture, null, 4));
 
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -32,21 +32,27 @@ export async function getStaticProps(context) {
 
   const pictureUrl = await s3.getSignedUrlPromise("getObject", params);
 
+  console.log("Found pictureUrl:", pictureUrl);
+
   if (!picture || !pictureUrl) {
     return {
       notFound: true,
     };
   }
 
-  return {
+  const result = {
     props: {
       pictureUrl,
       picture: {
         ...picture,
-        scheduledFor: dayjs(picture?.scheduledFor).format(),
+        scheduledFor: dayjs(picture.scheduledFor).format(),
       },
     }, // will be passed to the page component as props
   };
+
+  console.log("Result: ", JSON.stringify(result, null, 4));
+
+  return result;
 }
 
 const Home: NextPage = ({
